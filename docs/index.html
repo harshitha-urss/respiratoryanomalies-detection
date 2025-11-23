@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Voice Infection Classifier</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #b3daff 35%, #fbd6ea 100%);
+      margin: 0;
+      color: #232b38;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .disclaimer-float {
+      width: 100vw;
+      text-align: center;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 1.27em;
+      color: #000;
+      font-weight: bold;
+      background: transparent;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding: 32px 0 7px 0;
+      letter-spacing: 0.035em;
+      box-shadow: none;
+      line-height: 1.32em;
+    }
+    .disclaimer-float .icon {
+      font-size: 1.15em;
+      margin-right: 7px;
+      vertical-align: -2.5px;
+      color: #ffb300;
+      user-select: none;
+    }
+    .disclaimer-float strong {
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: bold;
+      color: #000;
+      margin-right: 2px;
+    }
+    .disclaimer-detail-float {
+      font-family: 'Times New Roman', Times, serif;
+      color: #000;
+      font-size: 0.98em;
+      margin-top: 8px;
+      letter-spacing: 0.02em;
+      opacity: 0.92;
+      font-weight: normal;
+    }
+    .main-container {
+      background: #fffdfaeb;
+      margin: 36px auto 0 auto;
+      width: 94vw;
+      max-width: 410px;
+      border-radius: 24px;
+      box-shadow: 0 9px 34px #95c5e8bc, 0 2px 20px #e8e6ed55;
+      padding: 32px 4vw 28px 4vw;
+      min-height: 285px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.2s;
+    }
+    h1 {
+      font-size: 1.62em;
+      margin-bottom: 13px;
+      margin-top: 0;
+      letter-spacing: 1.03px;
+      font-weight: bold;
+      color: #253954;
+    }
+    .subtitle {
+      font-size: 1.04em;
+      color: #537095;
+      opacity: 0.9;
+      margin-bottom: 16px;
+      margin-top: 1px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .divider {
+      width: 86%;
+      border: none;
+      border-top: 1.3px solid #e4ecf4;
+      margin: 9px auto 19px auto;
+      opacity: 0.63;
+    }
+    .info-text {
+      color: #4b4b5f;
+      font-size: 1.046em;
+      margin-bottom: 17px;
+      opacity: 0.85;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 1.1em;
+      margin-bottom: 0;
+      flex-wrap: wrap;
+    }
+    button {
+      background: linear-gradient(90deg, #ffe8a3 0%, #99c9ee 100%);
+      color: #232b38;
+      font-weight: bold;
+      padding: 13px 32px;
+      border: none;
+      border-radius: 24px;
+      box-shadow: 0 1.5px 8px #a7bfc61f;
+      font-size: 1.08em;
+      letter-spacing: 0.7px;
+      cursor: pointer;
+      transition: background 0.13s, box-shadow 0.15s, transform 0.08s;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    button:disabled {
+      background: #eceeef;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+    button:active {
+      transform: translateY(2px) scale(0.97);
+    }
+    button:hover:enabled {
+      background: linear-gradient(90deg, #AFE7FF 0%, #ffe68d 100%);
+      box-shadow: 0 6px 20px #f6dfa8a2;
+    }
+    #result {
+      font-size: 1.09em;
+      margin-top: 19px;
+      font-weight: 500;
+      color: #274836;
+      border-radius: 8px;
+      display: inline-block;
+      background: #f5faf9;
+      padding: 12px 29px 12px 29px;
+      margin-bottom: 13px;
+      box-shadow: 0 1px 8px #a8bcd120;
+    }
+    #loader {
+      display: none;
+      margin-top: 15px;
+      font-size: 1.08em;
+      background: #fcfcfff6;
+      color: #1799b8;
+      font-weight: bold;
+      padding: 9px 17px;
+      border-radius: 10px;
+      border: 1.1px solid #b0e5ff;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 4px 13px #b1dff84a;
+    }
+    audio {
+      margin-top: 13px;
+      margin-bottom: 9px;
+      outline: none;
+    }
+    .footer-float {
+      padding: 17px 0 15px 0;
+      background: transparent;
+      color: #000;
+      font-size: 1.15em;
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: bold;
+      border-top: none;
+      text-align: center;
+      width: 100vw;
+      letter-spacing: 0.03em;
+      margin-bottom: 0;
+      margin-top: 30px;
+      box-shadow: none;
+    }
+    .footer-float .footer-note {
+      color: #000;
+      font-size: 1em;
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: normal;
+      margin-top: 7px;
+      display: block;
+      opacity: .7;
+    }
+    @media (max-width: 600px) {
+      .main-container { padding: 10px 2vw 13px 2vw; min-height: 170px;}
+      h1 { font-size: 1em; }
+      .button-row { gap: 0.5em; }
+      #result { font-size: 0.93em; padding: 7px 2vw; }
+      .info-text { font-size: 0.96em; }
+      button { font-size: .98em; padding: 9px 2vw; }
+      #loader { padding: 7px 11px; }
+      .footer-float { font-size: 0.98em; padding: 8px 0 8px 0; }
+      .disclaimer-float { font-size: 0.99em; padding: 10px 2vw 3px 2vw;}
+    }
+  </style>
+</head>
+<body>
+  <div class="disclaimer-float">
+    <span class="icon">⚠️</span>
+    <strong>Disclaimer:</strong>
+    This website was built for academic demonstration and main mini project purposes by the student.
+    <div class="disclaimer-detail-float">
+      For education/project use only. Not for clinical or diagnostic purposes of any kind.
+    </div>
+  </div>
+  <div class="main-container">
+    <h1>Voice Infection Classifier</h1>
+    <span class="subtitle">Detect respiratory anomalies or infections from recorded speech audio.</span>
+    <hr class="divider">
+    <div class="info-text">
+      Press <b>Record</b>, speak for 5 seconds, then click <b>Send to Model</b>. Wait for the model to analyze and show the health prediction.<br>
+      <span style="font-size:0.95em; color:#967ecf; opacity:0.82;">Make sure your microphone is allowed and background noise is minimal for better results.</span>
+    </div>
+    <div class="button-row">
+      <button id="recordBtn">🎤 Record (5s)</button>
+      <button id="sendBtn" disabled>Send to Model</button>
+    </div>
+    <div id="loader">Predicting...</div>
+    <div id="result"></div>
+    <audio id="player" controls style="display:none;"></audio>
+  </div>
+  <footer class="footer-float">
+    © Created by HARSHITHA M V for the purpose of main Mini Project
+    <span class="footer-note">
+      All rights reserved · 2024
+    </span>
+  </footer>
+<script>
+let chunks = [];
+let mediaRecorder;
+let audioBlob;
+
+const recordBtn = document.getElementById('recordBtn');
+const sendBtn = document.getElementById('sendBtn');
+const resultDiv = document.getElementById('result');
+const loader = document.getElementById('loader');
+const player = document.getElementById('player');
+
+recordBtn.onclick = async function () {
+    resultDiv.textContent = '';
+    sendBtn.disabled = true;
+    chunks = [];
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = e => chunks.push(e.data);
+      mediaRecorder.onstop = e => {
+          audioBlob = new Blob(chunks, { type: 'audio/wav' });
+          player.src = URL.createObjectURL(audioBlob);
+          player.style.display = 'block';
+          sendBtn.disabled = false;
+          stream.getTracks().forEach(track => track.stop());
+      };
+      mediaRecorder.start();
+      recordBtn.disabled = true;
+      setTimeout(() => {
+          mediaRecorder.stop();
+          recordBtn.disabled = false;
+      }, 5000);
+    } catch (err) {
+      resultDiv.textContent = 'Error: Please allow microphone access!';
+    }
+};
+
+sendBtn.onclick = function () {
+    if (!audioBlob) return;
+    loader.style.display = 'block';
+    resultDiv.textContent = '';
+    let formData = new FormData();
+    formData.append('file', audioBlob, 'recorded_audio.wav');
+    fetch('https://respiratoryanomalies-detection.onrender.com/predict/', { // CHANGE THIS when backend is deployed!
+        method: 'POST',
+        body: formData
+    }).then(res => res.json())
+      .then(data => {
+        loader.style.display = 'none';
+        resultDiv.innerHTML = `<b>Result: ${data.label}</b><br>Probabilities: [Healthy: ${data.probabilities[0].toFixed(2)}, Infected: ${data.probabilities[1].toFixed(2)}]`;
+      }).catch(err => {
+        loader.style.display = 'none';
+        resultDiv.innerText = "Error: " + err;
+      });
+};
+</script>
+</body>
+</html>
