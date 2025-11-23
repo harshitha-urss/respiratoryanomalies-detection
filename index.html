@@ -274,7 +274,7 @@ sendBtn.onclick = function () {
     resultDiv.textContent = '';
     let formData = new FormData();
     formData.append('file', audioBlob, 'recorded_audio.wav');
-    fetch('http://127.0.0.1:8000/predict/', { // CHANGE THIS when backend is deployed!
+    fetch('https://respiratoryanomalies-detection.onrender.com/predict/', { // CHANGE THIS when backend is deployed!
         method: 'POST',
         body: formData
     }).then(res => res.json())
