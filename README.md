@@ -3,8 +3,11 @@
 
 An AI-powered web application that detects **respiratory anomalies or possible infections from recorded speech audio** using a **Convolutional Neural Network (CNN)** model.
 
-🔗 **Live Website:**  
+🔗 **Complete Information Live Website:** 
 https://harshitha-urss.github.io/respiratoryanomalies-detection/
+
+🔗 **Project Live Website:**  
+https://harshitha-urss.github.io/respiratoryanomalies-detection/index_app.html
 
 🔗 **GitHub Repository:**  
 https://github.com/harshitha-urss/respiratoryanomalies-detection
